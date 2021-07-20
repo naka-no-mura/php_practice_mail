@@ -12,7 +12,7 @@ mb_language('Japanese');
 mb_internal_encoding('UTF-8');
 
 if (!empty($to)) {
-  if (filter_var($to, FILTER_VALIDATE_EMAIL)) {
+  if (preg_match("/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/", $to)) {
     $to;
   } else {
     $to = '';
