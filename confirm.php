@@ -1,20 +1,48 @@
 <?php
 
+$to = (string)filter_input(INPUT_POST, 'to');
+$title = (string)filter_input(INPUT_POST, 'title');
+$message = (string)filter_input(INPUT_POST, 'content');
+
+$errors = [];
+$returnPath = '-f'.'test@test.com';
+$headers = "From: test@test.com";
+
 mb_language('Japanese');
 mb_internal_encoding('UTF-8');
 
-$to = $_POST['to'];
-$title = $_POST['title'];
-$message = $_POST['content'];
-$headers = "From: test@test.com";
-
-if (mb_send_mail($to, $title, $message, $headers)) {
-  echo 'メール送信成功です';
+if (!empty($to)) {
+  if (filter_var($to, FILTER_VALIDATE_EMAIL)) {
+    $to;
+  } else {
+    $to = '';
+    $errors[] = 'メールアドレスが不正な形式です';
+  }
 } else {
-  echo 'メール送信失敗です';
+  $errors[] = 'メールアドレスが入力されていません';
 }
 
-phpinfo();
+if (!empty($title)) {
+  if (mb_strlen($title) > 40) {
+    $errors[] = '件名は40文字以内で入力してください';
+  } else {
+    $title;
+  }
+} else {
+  $errors[] = '件名が入力されていません';
+}
+
+if (!empty($to && $title)) {
+  if (mb_send_mail($to, $title, $message, $headers, $returnPath)) {
+    echo 'メール送信成功です';
+  } else {
+    echo 'メール送信失敗です';
+  }
+} else {
+  $errors[] = '入力欄を確認してください';
+  $errors[] = 'メール送信失敗です';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -26,7 +54,14 @@ phpinfo();
 </head>
 <body>
   <head>
-    <h1>メール送信</h1>
+    <h1>メール送信の確認</h1>
   </head>
+  <main>
+    <p>
+      <?php foreach ($errors as $error): ?>
+        <p><?php echo $error; ?></p>
+      <?php endforeach; ?>
+    </p>
+  </main>
 </body>
 </html>
