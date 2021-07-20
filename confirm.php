@@ -6,7 +6,36 @@ $message = (string)filter_input(INPUT_POST, 'content');
 
 $errors = [];
 $returnPath = '-f'.'test@test.com';
-$headers = "From: test@test.com";
+// 送信元
+$from = "練習用アカウント";
+
+// 送信元メールアドレス
+// 動作確認時にMacに登録したメアドへ書き換える
+$from_mail = "test@test.com";
+
+// 送信者名
+$from_name = "メール送信練習アカウント";
+
+// 送信者情報の設定
+// $headers = "From: test@test.com";
+$headers = [
+  // メール形式
+  "Content-Type: text/plain \r\n",
+  // 送信先メールアドレスが受け取り不可の場合に、エラー通知のいくメールアドレス
+  "Return-Path: " . $from_mail . " \r\n",
+  // 送信者の名前（または組織名）とメールアドレス
+  "From: " . $from ." \r\n",
+  // 送信者の名前（または組織名）とメールアドレス
+  "Sender: " . $from ." \r\n",
+  // 受け取った人に表示される返信の宛先
+  "Reply-To: " . $from_mail . " \r\n",
+  // 送信者名（または組織名）
+  "Organization: " . $from_name . " \r\n",
+  // 送信者のメールアドレス
+  "X-Sender: " . $from_mail . " \r\n",
+  // メールの重要度を表す
+  "X-Priority: 3 \r\n"
+];
 
 mb_language('Japanese');
 mb_internal_encoding('UTF-8');
