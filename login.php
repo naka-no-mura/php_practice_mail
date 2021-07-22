@@ -6,9 +6,7 @@ require_once('dbconnect.php');
 $email = (string)filter_input(INPUT_POST, 'email');
 $password = (string)filter_input(INPUT_POST, 'password');
 
-if ($_COOKIE['email'] != '') {
-  $email = $_COOKIE['email'];
-  $password = $_COOKIE['password'];
+if ($_COOKIE['randomString'] != '') {
   $_POST['save'] = 'on';
 }
 
@@ -36,12 +34,10 @@ if (!empty($email && $password)) {
       $_SESSION['time'] = time();
 
       if ($_POST['save'] === 'on') {
-        $stmt = $pdo->prepare('SELECT random_string FROM cookies WHERE id = ?');
+        $stmt = $pdo->prepare('SELECT random_string FROM cookies WHERE user_id = ?');
         $stmt->execute([$user['id']]);
-        $random = $stmt->fetchAll();
-        setcookie('email', $email, time()+60*60*24*14);
-        setcookie('password', $password, time()+60*60*24*14);
-        setcookie('randomString', $random, time()+60*60*24*14);
+        $random = $stmt->fetch();
+        setcookie('randomString', $random['random_string'], time()+60*60*24*14);
       }
 
       header('Location: mailform.php');
