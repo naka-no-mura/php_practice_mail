@@ -10,11 +10,21 @@ if (!isset($_SESSION['join'])) {
 
 if (!empty($_POST['action'])) {
 // 登録処理
-  $stmt = $pdo->prepare("INSERT INTO users (name, email, password) values (?, ?, ?)");
+  $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES(?, ?, ?)");
   $stmt->execute([
     $_SESSION['join']['name'],
     $_SESSION['join']['email'],
     $_SESSION['join']['password'],
+  ]);
+
+  $user = $pdo->prepare("SELECT id FROM users WHERE name = :name");
+  $user->execute([':name' => $_SESSION['join']['name']]);
+  $userId = $user->fetchAll();
+
+  $random = $pdo->prepare("INSERT INTO cookies (user_id, random_string) VALUES(:user_id, :random_string)");
+  $random->execute([
+    ':user_id' => $userId[0]['id'],
+    ':random_string' => $_SESSION['join']['randomString']
   ]);
 
   header('Location: thanks.php');
@@ -45,6 +55,8 @@ if (!empty($_POST['action'])) {
           <dd><?php print(htmlspecialchars($_SESSION['join']['email'], ENT_QUOTES)); ?></dd>
           <dt>パスワード</dt>
           <dd><?php print(htmlspecialchars($_SESSION['join']['password'], ENT_QUOTES)); ?></dd>
+          <dt>randomString</dt>
+          <dd><?php print(htmlspecialchars($_SESSION['join']['randomString'], ENT_QUOTES)); ?></dd>
         </dl>
         <input type="submit" value="登録する">
       </form>

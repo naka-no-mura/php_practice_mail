@@ -24,10 +24,12 @@ if (!empty($name && $email && $password)) {
   }
 
   if (empty($error)) {
+    $randomString = password_hash(random_bytes(10), PASSWORD_DEFAULT);
     $_SESSION['join'] = [
       'name' => $name,
       'email' => $email,
-      'password' => $password
+      'password' => $password,
+      'randomString' => $randomString
     ];
     header('Location: check.php');
     exit();

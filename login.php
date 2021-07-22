@@ -36,8 +36,12 @@ if (!empty($email && $password)) {
       $_SESSION['time'] = time();
 
       if ($_POST['save'] === 'on') {
+        $stmt = $pdo->prepare('SELECT random_string FROM cookies WHERE id = ?');
+        $stmt->execute([$user['id']]);
+        $random = $stmt->fetchAll();
         setcookie('email', $email, time()+60*60*24*14);
         setcookie('password', $password, time()+60*60*24*14);
+        setcookie('randomString', $random, time()+60*60*24*14);
       }
 
       header('Location: mailform.php');
