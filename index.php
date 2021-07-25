@@ -22,7 +22,9 @@ session_start();
     </header>
     <body>
       <a href="login.php">ログイン画面へ</a><br>
-      <a href="signUp.php">新規登録画面へ</a>
+      <a href="signUp.php">新規登録画面へ</a><br>
+      <a href="mailform.php">メール送信画面へ</a><br>
+      <a href="jsonObject.php">JSONとオブジェクト＄連想配列の変換画面へ</a>
     </body>
   </main>
 </body>
