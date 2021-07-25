@@ -18,7 +18,7 @@ if ($object_btn) {
   $stmt->execute();
   $object = $stmt->fetchAll();
   $object = json_encode($object);
-  $object = json_decode($object);
+  $object = json_decode($object,true);
 }
 
 ?>
