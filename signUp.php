@@ -24,7 +24,7 @@ if (!empty($name && $email && $password)) {
   }
 
   if (empty($error)) {
-    $randomString = password_hash(random_bytes(10), PASSWORD_DEFAULT);
+    $randomString = bin2hex(random_bytes(32));
     $_SESSION['join'] = [
       'name' => $name,
       'email' => $email,

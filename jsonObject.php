@@ -6,6 +6,7 @@ require_once('dbconnect.php');
 $json_btn = (string)filter_input(INPUT_POST, 'json_btn');
 $object_btn = (string)filter_input(INPUT_POST, 'object_btn');
 
+// ユーザー情報をDBから引っ張ってjsonで返す
 if ($json_btn) {
   $stmt = $pdo->query('SELECT * FROM users');
   $stmt->execute();
@@ -13,12 +14,13 @@ if ($json_btn) {
   $json = json_encode($json);
 }
 
+// ユーザー情報をDBから引っ張ってobjectで返す（json_decodeの第2引数をtrueにすると連想配列へ変換）
 if ($object_btn) {
   $stmt = $pdo->query('SELECT * FROM users');
   $stmt->execute();
   $object = $stmt->fetchAll();
   $object = json_encode($object);
-  $object = json_decode($object);
+  $object = json_decode($object, true);
 }
 
 ?>
@@ -32,7 +34,7 @@ if ($object_btn) {
 </head>
 <body>
   <header>
-    <h1>JSONとオブジェクト＄連想配列の変換画面</h1>
+    <h1>JSONとオブジェクト&連想配列の変換画面</h1>
   </header>
   <main>
     <form action="" method="post">
